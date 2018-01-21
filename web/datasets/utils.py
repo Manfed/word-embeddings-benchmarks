@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Downloading datasets: utility functions
 
@@ -15,6 +17,7 @@ import shutil
 import tempfile
 import time
 import sys
+import io
 import tarfile
 import warnings
 import zipfile
@@ -27,22 +30,26 @@ from .._utils.compat import _basestring, cPickle, _urllib, md5_hash
 TEMP = tempfile.gettempdir()
 
 
-def _get_cluster_assignments(dataset_name, url, sep=" ", skip_header=False):
-    data_dir = _get_dataset_dir("categorization", verbose=0)
-    _fetch_file(url=url,
-                 data_dir=data_dir,
-                 uncompress=True,
-                 move="{0}/{0}.txt".format(dataset_name),
-                 verbose=0)
-    files = glob.glob(os.path.join(data_dir, dataset_name + "/*.txt"))
+def _get_cluster_assignments(dataset_name, path, sep=" ", skip_header=False):
+    # data_dir = _get_dataset_dir("categorization", verbose=0)
+    # _fetch_file(url=url,
+    #              data_dir=data_dir,
+    #              uncompress=True,
+    #              move="{0}/{0}.txt".format(dataset_name),
+    #              verbose=0)
+    files = glob.glob(os.path.join(path, dataset_name + "/*.txt"))
     X = []
     y = []
     names = []
     for cluster_id, file_name in enumerate(files):
-        with open(file_name) as f:
+        with io.open(file_name, encoding='utf-8') as f:
             lines = f.read().splitlines()[(int(skip_header)):]
 
-            X += [l.split(sep) for l in lines]
+            for index, line in enumerate(lines):
+                if len(line) > 0:
+                    X += line.split(sep)
+                else:
+                    lines.pop(index)
             y += [os.path.basename(file_name).split(".")[0]] * len(lines)
     return Bunch(X=np.array(X, dtype="object"), y=np.array(y).astype("object"))
 

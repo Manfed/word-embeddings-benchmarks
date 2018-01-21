@@ -6,6 +6,7 @@
 
 from sklearn.datasets.base import Bunch
 from .utils import _get_cluster_assignments
+from datasets.utils import get_full_path
 
 
 def fetch_AP():
@@ -51,10 +52,10 @@ def fetch_AP():
     ambiguous; and nouns with a single sense as not ambiguous.
     """
 
-    file = open('\datasets\kategoryzacja\EN-AP"', encoding="utf8")
+    path = get_full_path() + '/categorization'
 
-    return _get_cluster_assignments(dataset_name="EN-AP",
-                                    url=file)
+    return _get_cluster_assignments(dataset_name="PL-AP",
+                                    path=path)
 
 
 def fetch_BLESS():
