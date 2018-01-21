@@ -23,7 +23,6 @@ from web.datasets.utils import _get_dataset_dir
 
 from web.evaluate import evaluate_on_all
 
-
 # Configure logging
 logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG, datefmt='%I:%M:%S')
 logger = logging.getLogger(__name__)

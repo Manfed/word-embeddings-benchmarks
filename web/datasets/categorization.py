@@ -50,8 +50,11 @@ def fetch_AP():
     highly ambiguous; nouns with 2 or 3 senses medium
     ambiguous; and nouns with a single sense as not ambiguous.
     """
+
+    file = open('\datasets\kategoryzacja\EN-AP"', encoding="utf8")
+
     return _get_cluster_assignments(dataset_name="EN-AP",
-                                    url="https://www.dropbox.com/sh/6xu1c1aan8f83p3/AACMyoLwncNhRkUkqvGurYB6a?dl=1")
+                                    url=file)
 
 
 def fetch_BLESS():

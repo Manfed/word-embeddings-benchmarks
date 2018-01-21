@@ -69,13 +69,16 @@ def fetch_MEN(which="all", form="natural"):
     implementing semantic similarity and relatedness measures.
     """
     if which == "dev":
-        data = _get_as_pd('https://www.dropbox.com/s/c0hm5dd95xapenf/EN-MEN-LEM-DEV.txt?dl=1',
+        file = open('\datasets\prawdopodobienstwo\EN-MEN-LEM.txt', encoding="utf8")
+        data = _get_as_pd(file,
                           'similarity', header=None, sep=" ")
     elif which == "test":
-        data = _get_as_pd('https://www.dropbox.com/s/vdmqgvn65smm2ah/EN-MEN-LEM-TEST.txt?dl=1',
+        file = open('\datasets\prawdopodobienstwo\EN-MEN-LEM.txt', encoding="utf8")
+        data = _get_as_pd(file,
                           'similarity/EN-MEN-LEM-TEST', header=None, sep=" ")
     elif which == "all":
-        data = _get_as_pd('https://www.dropbox.com/s/b9rv8s7l32ni274/EN-MEN-LEM.txt?dl=1',
+        file = open('\datasets\prawdopodobienstwo\EN-MEN-LEM.txt', encoding="utf8")
+        data = _get_as_pd(file,
                           'similarity', header=None, sep=" ")
     else:
         raise RuntimeError("Not recognized which parameter")
