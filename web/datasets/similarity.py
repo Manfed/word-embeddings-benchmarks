@@ -8,6 +8,7 @@ import numpy as np
 
 from sklearn.datasets.base import Bunch
 from .utils import _get_as_pd
+from datasets.utils import get_full_path
 
 def fetch_MTurk():
     """
@@ -69,16 +70,16 @@ def fetch_MEN(which="all", form="natural"):
     implementing semantic similarity and relatedness measures.
     """
     if which == "dev":
-        file = open('\datasets\prawdopodobienstwo\EN-MEN-LEM.txt', encoding="utf8")
-        data = _get_as_pd(file,
+        path = get_full_path() + '/datasets/similarity/'
+        data = _get_as_pd(path,
                           'similarity', header=None, sep=" ")
     elif which == "test":
-        file = open('\datasets\prawdopodobienstwo\EN-MEN-LEM.txt', encoding="utf8")
-        data = _get_as_pd(file,
-                          'similarity/EN-MEN-LEM-TEST', header=None, sep=" ")
+        path = get_full_path() + '/datasets/similarity'
+        data = _get_as_pd(path,
+                          '/PL-MEN-LEM-TEST', header=None, sep=" ")
     elif which == "all":
-        file = open('\datasets\prawdopodobienstwo\EN-MEN-LEM.txt', encoding="utf8")
-        data = _get_as_pd(file,
+        path = get_full_path() + '/datasets/similarity/'
+        data = _get_as_pd(path,
                           'similarity', header=None, sep=" ")
     else:
         raise RuntimeError("Not recognized which parameter")
