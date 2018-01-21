@@ -14,7 +14,7 @@ from sklearn.utils import check_random_state
 from sklearn.datasets.base import Bunch
 from .utils import _get_dataset_dir, _fetch_file, _change_list_to_np
 from ..utils import standardize_string
-
+from datasets.utils import get_full_path
 
 def fetch_wordrep(subsample=None, rng=None):
     """
@@ -41,11 +41,7 @@ def fetch_wordrep(subsample=None, rng=None):
     why it returns word paris
 
     """
-    path = _fetch_file(url="https://www.dropbox.com/sh/5k78h9gllvc44vt/AAALLQq-Bge605OIMlmGBbNJa?dl=1",
-                       data_dir="analogy",
-                       uncompress=True,
-                       move="EN-WORDREP/EN-WORDREP.zip",
-                       verbose=0)
+    path = get_full_path() + '/analogy/PL-WORDREP/'
 
     wikipedia_dict = glob.glob(os.path.join(path, "Pairs_from_Wikipedia_and_Dictionary/*.txt"))
     wordnet = glob.glob(os.path.join(path, "Pairs_from_WordNet/*.txt"))
@@ -62,9 +58,11 @@ def fetch_wordrep(subsample=None, rng=None):
         c = c[c.index("-")+1:]
         with open(file_name, "r") as f:
             for l in f.read().splitlines():
-                word_pairs.append(standardize_string(l).split())
-                category.append(c)
-                category_high_level.append("wikipedia-dict" if file_name in wikipedia_dict else "wordnet")
+                splitted_words = standardize_string(l).split()
+                if len(splitted_words) == 2:
+                    word_pairs.append(splitted_words)
+                    category.append(c)
+                    category_high_level.append("wikipedia-dict" if file_name in wikipedia_dict else "wordnet")
 
     if subsample:
         assert 0 <= subsample <= 1.0
@@ -196,7 +194,7 @@ def fetch_msr_analogy():
     We then systematically generated analogy questions by randomly matching each of the 100 words with 5 other words
     from the same category, and creating variants.
     """
-    file = open('\datasets\kategoryzacja\EN-AP"', encoding="utf8")
+    file = open('/datasets/analogy/PL-WORDREP"', encoding="utf8")
     with open(_fetch_file(file, "analogy/EN-MSR", verbose=0), "r") as f:
         L = f.read().splitlines()
 

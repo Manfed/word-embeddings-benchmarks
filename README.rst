@@ -86,4 +86,4 @@ If you use package in your work, you are welcome to cite https://arxiv.org/abs/1
 Modifications
 =============
 Modified several datasets to match the polish language. Datasets was translated via Google Translator.
-I've translated MEN for similarity, MSR for analogy, AP for categorization.
+We've translated MEN for similarity, WORDNET for analogy, AP for categorization.
