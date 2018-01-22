@@ -5,6 +5,9 @@
 """
 
 import numpy as np
+import io
+import os
+import glob
 
 from sklearn.datasets.base import Bunch
 from .utils import _get_as_pd
@@ -39,7 +42,7 @@ def fetch_MTurk():
                  y=2 * data[:, 2].astype(np.float))
 
 
-def fetch_MEN(which="all", form="natural"):
+def fetch_MEN():
     """
     Fetch MEN dataset for testing similarity and relatedness
 
@@ -69,28 +72,28 @@ def fetch_MEN(which="all", form="natural"):
     Turk via the CrowdFlower interface. The collection can be used to train and/or test computer algorithms
     implementing semantic similarity and relatedness measures.
     """
-    if which == "dev":
-        path = get_full_path() + '/datasets/similarity/'
-        data = _get_as_pd(path,
-                          'similarity', header=None, sep=" ")
-    elif which == "test":
-        path = get_full_path() + '/datasets/similarity'
-        data = _get_as_pd(path,
-                          '/PL-MEN-LEM-TEST', header=None, sep=" ")
-    elif which == "all":
-        path = get_full_path() + '/datasets/similarity/'
-        data = _get_as_pd(path,
-                          'similarity', header=None, sep=" ")
-    else:
-        raise RuntimeError("Not recognized which parameter")
+    path = get_full_path()
+    files = glob.glob(os.path.join(path, 'similarity/*.txt'))
 
-    if form == "natural":
-        # Remove last two chars from first two columns
-        data = data.apply(lambda x: [y if isinstance(y, float) else y[0:-2] for y in x])
-    elif form != "lem":
-        raise RuntimeError("Not recognized form argument")
+    values = []
 
-    return Bunch(X=data.values[:, 0:2].astype("object"), y=data.values[:, 2:].astype(np.float) / 5.0)
+    for file in files:
+        pair_number = 0
+        with io.open(file, encoding='utf-8') as f:
+            for line in f.read().splitlines():
+                splitted_line = line.split(' ')
+                if len(splitted_line) == 3:
+                    pair = []
+                    for i in range(0, 2):
+                        if len(splitted_line[i]) >= 2 and splitted_line[i][-2] == '-':
+                            pair.append(splitted_line[i][:-2])
+                        elif len(splitted_line) > 2:
+                            pair.append(splitted_line[i])
+                    if len(pair) == 2:
+                        pair_number += 1
+                        values.append(pair)
+
+    return Bunch(X=np.array(values), y=np.array(['similarity'] * pair_number).astype("object"))
 
 
 def fetch_WS353(which="all"):
